@@ -3,19 +3,20 @@ package com.example.android.quakereport;
 import android.app.Activity;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
+
+    private String location;
+    private String locationOffset;
+    private static final String LOCATION_SEPARATOR = " of ";
 
     public EarthquakeAdapter(Activity context, List<Earthquake> earthquakes) {
         super(context, 0, earthquakes);
@@ -34,20 +35,36 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
         Earthquake earthquakeAdapter = getItem(position);
 
+        String originalLocation = earthquakeAdapter.getLocation();
+
+        trimStringLocationOffset(originalLocation);
+
         TextView magnitudeTextView = (TextView) listItemView.findViewById(R.id.magnitude);
-        magnitudeTextView.setText(earthquakeAdapter.getMagnitude());
+        magnitudeTextView.setText(FormatterUtil.formatScaleNumber(earthquakeAdapter.getMagnitude()));
 
         TextView locationTextView = (TextView) listItemView.findViewById(R.id.location);
-        locationTextView.setText(earthquakeAdapter.getLocation());
+        locationTextView.setText(location);
 
-        Date dateObject = new Date(earthquakeAdapter.getDate());
+        TextView locationOffsetTextView = (TextView) listItemView.findViewById(R.id.location_offset);
+        locationOffsetTextView.setText(locationOffset);
 
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
-        dateTextView.setText(DateUtil.formatDate(dateObject));
+        dateTextView.setText(FormatterUtil.formatDate(new Date(earthquakeAdapter.getDate())));
 
         TextView timeTextView = (TextView) listItemView.findViewById(R.id.time);
-        timeTextView.setText(DateUtil.formatTime(dateObject));
+        timeTextView.setText(FormatterUtil.formatTime(new Date(earthquakeAdapter.getDate())));
 
         return listItemView;
+    }
+
+    private void trimStringLocationOffset(String originalLocation) {
+        if (originalLocation.contains(LOCATION_SEPARATOR)) {
+            String[] parts = originalLocation.split(LOCATION_SEPARATOR);
+            locationOffset = parts[0] + LOCATION_SEPARATOR;
+            location = parts[1];
+        } else {
+            locationOffset = getContext().getString(R.string.near_the);
+            location = originalLocation;
+        }
     }
 }

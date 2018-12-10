@@ -1,11 +1,12 @@
 package com.example.android.quakereport;
 
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-public class DateUtil {
+public class FormatterUtil {
 
-    private DateUtil() {
+    private FormatterUtil() {
 
     }
 
@@ -17,6 +18,11 @@ public class DateUtil {
     public static String formatDate(Date date ) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("MMM DD, YYYY");
         return dateFormat.format(date);
+    }
+
+    public static String formatScaleNumber(double scaleNumber) {
+        DecimalFormat scaleFormat = new DecimalFormat("0.0");
+        return scaleFormat.format(scaleNumber);
     }
 
 }
