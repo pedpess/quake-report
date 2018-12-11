@@ -16,7 +16,7 @@ public final class Util {
     }
 
     public static String formatDate(Date date ) {
-        SimpleDateFormat dateFormat = new SimpleDateFormat("MMM DD, YYYY");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("DD MMM, YYYY");
         return dateFormat.format(date);
     }
 

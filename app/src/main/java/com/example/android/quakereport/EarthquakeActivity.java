@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 
 import java.util.ArrayList;
@@ -32,18 +31,23 @@ public class EarthquakeActivity extends AppCompatActivity {
 
     public static final String LOG_TAG = EarthquakeActivity.class.getName();
 
+    private static final String USGS_REQUEST_URL =
+            "https://earthquake.usgs.gov/fdsnws/event/1/query?format=geojson&orderby=time&minmag=6&limit=10";
+
+    private EarthquakeAdapter earthquakeAdapter;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.earthquake_activity);
 
-        List<Earthquake> earthquakes = QueryUtils.extractEarthquakes();
-
         // Find a reference to the {@link ListView} in the layout
         ListView earthquakeListView = (ListView) findViewById(R.id.list);
 
+        new EarthquakeAsyncTask().execute(USGS_REQUEST_URL);
+
         // Create a new {@link ArrayAdapter} of earthquakes
-        final EarthquakeAdapter earthquakeAdapter = new EarthquakeAdapter(this, earthquakes);
+        earthquakeAdapter = new EarthquakeAdapter(this, new ArrayList<Earthquake>());
 
         // Set the adapter on the {@link ListView}
         // so the list can be populated in the user interface
@@ -65,12 +69,21 @@ public class EarthquakeActivity extends AppCompatActivity {
 
         @Override
         protected List<Earthquake> doInBackground(String... urls) {
+            if (urls.length < 1 || urls[0] == null) {
+                return null;
+            }
 
+            List<Earthquake> earthquakeResult = QueryUtils.fetchEarthquakeData(urls[0]);
+            return earthquakeResult;
         }
 
         @Override
         protected void onPostExecute(List<Earthquake> earthquakes) {
+            earthquakeAdapter.clear();
 
+            if (earthquakes != null && !earthquakes.isEmpty()) {
+                earthquakeAdapter.addAll(earthquakes);
+            }
         }
     }
 }
