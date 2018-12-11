@@ -42,7 +42,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         trimStringLocationOffset(originalLocation);
 
         TextView magnitudeTextView = (TextView) listItemView.findViewById(R.id.magnitude);
-        magnitudeTextView.setText(FormatterUtil.formatScaleNumber(earthquakeAdapter.getMagnitude()));
+        magnitudeTextView.setText(Util.formatScaleNumber(earthquakeAdapter.getMagnitude()));
 
         GradientDrawable magnitudeCircle = (GradientDrawable) magnitudeTextView.getBackground();
 
@@ -57,10 +57,10 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         locationOffsetTextView.setText(locationOffset);
 
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
-        dateTextView.setText(FormatterUtil.formatDate(new Date(earthquakeAdapter.getDate())));
+        dateTextView.setText(Util.formatDate(new Date(earthquakeAdapter.getDate())));
 
         TextView timeTextView = (TextView) listItemView.findViewById(R.id.time);
-        timeTextView.setText(FormatterUtil.formatTime(new Date(earthquakeAdapter.getDate())));
+        timeTextView.setText(Util.formatTime(new Date(earthquakeAdapter.getDate())));
 
         return listItemView;
     }
