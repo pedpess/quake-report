@@ -2,7 +2,6 @@ package com.example.android.quakereport;
 
 import android.content.AsyncTaskLoader;
 import android.content.Context;
-import android.net.NetworkInfo;
 
 import java.util.List;
 
