@@ -14,6 +14,10 @@ public class SettingsActivity extends AppCompatActivity {
     }
 
     public static class EarthquakePreferenceFragment extends PreferenceFragment {
-
+        @Override
+        public void onCreate(@Nullable Bundle savedInstanceState) {
+            super.onCreate(savedInstanceState);
+            addPreferencesFromResource(R.xml.settings_main);
+        }
     }
 }
